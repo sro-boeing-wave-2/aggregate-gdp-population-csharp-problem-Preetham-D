@@ -11,8 +11,8 @@ namespace AggregateGDPPopulation
     {
         public static void AggregateCalcultion ()
         {
-            string[] datafile = File.ReadAllLines("E:\\workspace\\c#\\aggregate-gdp-population-csharp-problem-Preetham-D\\AggregateGDPPopulation\\data\\datafile.csv", Encoding.UTF8);
-            string[] mapper = File.ReadAllLines("E:\\workspace\\c#\\aggregate-gdp-population-csharp-problem-Preetham-D\\AggregateGDPPopulation\\data\\cc-mapping.txt", Encoding.UTF8);
+            string[] datafile = File.ReadAllLines(@"../../../../AggregateGDPPopulation/data/datafile.csv", Encoding.UTF8);
+            string[] mapper = File.ReadAllLines(@"../../../../AggregateGDPPopulation/data/cc-mapping.txt", Encoding.UTF8);
             string[] header = (datafile[0].Replace("\"", "")).Split(',');
             string[][] map = new string[mapper.Length][];
             //var dic = mapper.ToDictionary<sKey => sKey.Split(',')[0],;
@@ -63,7 +63,7 @@ namespace AggregateGDPPopulation
             }
             //Console.Write(output["Africa"].GDP_2012);
             var jsonOut = Newtonsoft.Json.JsonConvert.SerializeObject(output);
-            File.WriteAllText("E:\\workspace\\c#\\aggregate-gdp-population-csharp-problem-Preetham-D\\AggregateGDPPopulation\\data\\output.json", jsonOut);
+            File.WriteAllText(@"..\..\..\..\AggregateGDPPopulation\data\output.json", jsonOut);
             //Console.Write(jsonOut);
 
             //Console.Read();
