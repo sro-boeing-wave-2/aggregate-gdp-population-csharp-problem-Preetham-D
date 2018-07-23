@@ -3,16 +3,21 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Linq;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace AggregateGDPPopulation
 {
     public class Class1
     {
-        public static void AggregateCalcultion ()
+        public static async Task<string[]> Reader(string filepath)
         {
-            string[] datafile = File.ReadAllLines(@"../../../../AggregateGDPPopulation/data/datafile.csv", Encoding.UTF8);
-            string[] mapper = File.ReadAllLines(@"../../../../AggregateGDPPopulation/data/cc-mapping.txt", Encoding.UTF8);
+            return (File.ReadAllLines(filepath, Encoding.UTF8));
+        }
+        public static async Task<Dictionary<string, aggregate>> Operations()
+        {
+            string[] datafile = await Reader(@"../../../../AggregateGDPPopulation/data/datafile.csv");
+            string[] mapper = await Reader(@"../../../../AggregateGDPPopulation/data/cc-mapping.txt");
             string[] header = (datafile[0].Replace("\"", "")).Split(',');
             string[][] map = new string[mapper.Length][];
             //var dic = mapper.ToDictionary<sKey => sKey.Split(',')[0],;
@@ -61,12 +66,16 @@ namespace AggregateGDPPopulation
                     }
                 }
             }
-            //Console.Write(output["Africa"].GDP_2012);
-            var jsonOut = Newtonsoft.Json.JsonConvert.SerializeObject(output);
+            return output;
+        }
+        public static async void Writer()
+        {
+            Dictionary<string, aggregate> output1 = await Operations();
+            var jsonOut = JsonConvert.SerializeObject(output1);
             File.WriteAllText(@"..\..\..\..\AggregateGDPPopulation\data\output.json", jsonOut);
             //Console.Write(jsonOut);
-
             //Console.Read();
+
         }
         public class aggregate
         {
@@ -74,6 +83,7 @@ namespace AggregateGDPPopulation
             public double GDP_2012;
             public double POPULATION_2012;
         }
+
     }
-    
+
 }
