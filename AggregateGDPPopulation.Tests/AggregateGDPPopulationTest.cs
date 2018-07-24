@@ -17,7 +17,7 @@ namespace AggregateGDPPopulation.Tests
             var x = await Class1.Writer();
             //Class1.Writer();
             //var actual = File.ReadAllText(@"../../../../AggregateGDPPopulation/data/output.json");
-            var expected = File.ReadAllText(@"../../../expectedOutput.json");
+            var expected = await File.ReadAllTextAsync(@"../../../expectedOutput.json");
             //Console.WriteLine("Looped");
             JObject actualJson = JObject.Parse(x);
             JObject expectedJson = JObject.Parse(expected);

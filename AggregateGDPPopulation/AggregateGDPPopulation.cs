@@ -12,12 +12,13 @@ namespace AggregateGDPPopulation
     {
         public static async Task<string[]> Reader(string filepath)
         {
-            //return (File.ReadAllLines(filepath, Encoding.UTF8));
+            return (await File.ReadAllLinesAsync(filepath, Encoding.UTF8));
             //string h = StreamReader(filepath);
-            StreamReader  data = new StreamReader(filepath);
-            string s = await data.ReadToEndAsync();
-            string[] data2 = s.Split('\n');
-            return (data2);
+            //StreamReader  data = new StreamReader(filepath);
+            //string s = await data.ReadToEndAsync();
+            
+            //string[] data2 = s.Split('\n');
+            //return (data2);
         }
         public static async Task<Dictionary<string, aggregate>> Operations()
         {
@@ -77,8 +78,10 @@ namespace AggregateGDPPopulation
         public static async Task<string> Writer()
         {
             Dictionary<string, aggregate> output1 = await Operations();
-            var jsonOut = JsonConvert.SerializeObject(output1);
-            File.WriteAllText(@"..\..\..\..\AggregateGDPPopulation\data\output.json", jsonOut);
+            string jsonOut = JsonConvert.SerializeObject(output1);
+            //string u = jsonOut.ToCharArray().ToString();
+            //string out = jsonOut.Join();
+            await File.WriteAllLinesAsync(@"..\..\..\..\AggregateGDPPopulation\data\output.json",jsonOut.Split(","));
             return jsonOut;
         }
         public class aggregate
