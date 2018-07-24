@@ -12,33 +12,40 @@ namespace AggregateGDPPopulation
     {
         public static async Task<string[]> Reader(string filepath)
         {
-            return (File.ReadAllLines(filepath, Encoding.UTF8));
+            //return (File.ReadAllLines(filepath, Encoding.UTF8));
+            //string h = StreamReader(filepath);
+            StreamReader  data = new StreamReader(filepath);
+            string s = await data.ReadToEndAsync();
+            string[] data2 = s.Split('\n');
+            return (data2);
         }
         public static async Task<Dictionary<string, aggregate>> Operations()
         {
             string[] datafile = await Reader(@"../../../../AggregateGDPPopulation/data/datafile.csv");
             string[] mapper = await Reader(@"../../../../AggregateGDPPopulation/data/cc-mapping.txt");
+            //string[][] temp1 = await Task<string[]>.WhenAll(Reader(@"../../../../AggregateGDPPopulation/data/datafile.csv"), Reader(@"../../../../AggregateGDPPopulation/data/cc-mapping.txt"));
+            //string[] datafile = temp1[0];
+            //string[] mapper = temp1[1];
             string[] header = (datafile[0].Replace("\"", "")).Split(',');
-            string[][] map = new string[mapper.Length][];
-            //var dic = mapper.ToDictionary<sKey => sKey.Split(',')[0],;
-            //map[0] = mapper[0].Split(',');
-            for (int i = 0; i < mapper.Length; i++)
-            {
-                map[i] = mapper[i].Split(',');
-                //dic = map.ToDictionary<country => 
-            }
+            string[][] map = new string[mapper.Length - 1][];
+            Console.WriteLine(mapper.Length);
+            //Console.Write(map[0][0]);
+                for (int i = 0; i < mapper.Length -1; i++)
+                {
+                    map[i] = mapper[i].Split(',');
+                //Console.WriteLine("new item added - " + mapper[i]);
+                }
+
+            //Console.WriteLine(count);
             Dictionary<string, string> countryContinent = new Dictionary<string, string>();
             countryContinent = map.ToDictionary(sr => sr[0], sr => sr[1]);
-            //map.ToDictionary();
-            //Console.Write(countryContinent["Venezuela"]);
-            //Console.Write(header[0]+'\n');
+            //foreach (string[] a in map)
+            //{
+            //   countryContinent.Add(a[0], a[1]);
+            //}
             int cI = Array.IndexOf(header, "Country Name");
             int gdp2012Index = Array.IndexOf(header, "GDP Billions (USD) 2012");
             int population2012Index = Array.IndexOf(header, "Population (Millions) 2012");
-            //int cI = header.IndexOf("Country Name");
-            //Console.Write(cI);
-            //Console.Write(gdp2012Index);
-            //Output sol = new Output();
             Dictionary<string, aggregate> output = new Dictionary<string, aggregate>();
             for (int i = 1; i < datafile.Length; i++)
             {
@@ -48,7 +55,6 @@ namespace AggregateGDPPopulation
                     string country = row[cI].Replace("\"", "");
                     double population = Convert.ToDouble(row[population2012Index].Replace("\"", ""));
                     double gdp = Convert.ToDouble(row[gdp2012Index].Replace("\"", ""));
-                    //Console.Write(countryContinent[country]);
                     aggregate temp = new aggregate();
                     if (country != "European Union")
                     {
@@ -68,22 +74,17 @@ namespace AggregateGDPPopulation
             }
             return output;
         }
-        public static async void Writer()
+        public static async Task<string> Writer()
         {
             Dictionary<string, aggregate> output1 = await Operations();
             var jsonOut = JsonConvert.SerializeObject(output1);
             File.WriteAllText(@"..\..\..\..\AggregateGDPPopulation\data\output.json", jsonOut);
-            //Console.Write(jsonOut);
-            //Console.Read();
-
+            return jsonOut;
         }
         public class aggregate
         {
-            //public string Continent;
             public double GDP_2012;
             public double POPULATION_2012;
         }
-
     }
-
 }

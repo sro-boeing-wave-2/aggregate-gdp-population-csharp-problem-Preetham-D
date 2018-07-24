@@ -12,12 +12,14 @@ namespace AggregateGDPPopulation.Tests
     public class UnitTest1
     {
         [Fact]
-        public void Test1()
+        public static async void Test1()
         {
-            Class1.Writer();
-            var actual = File.ReadAllText(@"../../../../AggregateGDPPopulation/data/output.json");
+            var x = await Class1.Writer();
+            //Class1.Writer();
+            //var actual = File.ReadAllText(@"../../../../AggregateGDPPopulation/data/output.json");
             var expected = File.ReadAllText(@"../../../expectedOutput.json");
-            JObject actualJson = JObject.Parse(actual);
+            //Console.WriteLine("Looped");
+            JObject actualJson = JObject.Parse(x);
             JObject expectedJson = JObject.Parse(expected);
             Assert.Equal(actualJson, expectedJson);
 
